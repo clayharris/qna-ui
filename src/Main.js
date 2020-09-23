@@ -1,6 +1,6 @@
 import React from 'react';
-
-import logo from "./logo.svg";
+import QuestionList from "./components/QuestionList";
+import * as axios from "axios";
 
 class Main extends React.Component {
 
@@ -10,37 +10,34 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:8080/v1/users',
-      {
-        method: 'get',
-        headers: new Headers({
-          'Authorization': 'Basic ' + btoa('test:test')
-        })
+    // fetch('http://localhost:8080/v1/users',
+    //   {
+    //     method: 'get',
+    //     headers: new Headers({
+    //       'Authorization': 'Basic ' + btoa('test:test')
+    //     })
+    //   })
+    //   .then(response => response.json())
+    //   .then(json => this.setState({ questions: json }))
+    //   .catch(err => console.error(err))
+    const options = {
+      url: 'http://localhost:8080/questions'
+    }
+    axios(options)
+      .then(res => {
+        this.setState({questions: res.data})
       })
-      .then(response => response.json())
-      .then(json => this.setState({ questions: json }))
-      .catch(err => console.error(err))
   }
 
   render() {
+    const questions = this.state;
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/YourMom.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          Questions!
         </header>
         <div>
-          <textarea style={{background: 'white'}} readOnly={true} value={JSON.stringify(this.state)} />
+          <QuestionList questions={Array.from(questions)} />
 
         </div>
       </div>
